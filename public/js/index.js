@@ -3,10 +3,6 @@ var socket = io(); //client method from perspective of client
 socket.on('connect', function () {
   console.log('Connected to server');
 
-  socket.emit('createMessage', {
-    from: 'Sean',
-    text: 'Hello its Sean'
-  });
 });
 
 

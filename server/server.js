@@ -15,14 +15,13 @@
   io.on('connection', (socket) =>{ // indiv socket as opposed to all of the users server notices that a client has connected. Perspective of server
     console.log('New user connected');
 
-    socket.emit('newMessage', {
-      from: 'mike@example.com',
-      text: 'Hey. What go on',
-      createdAt: 123
-    });
-
     socket.on('createMessage',(message) =>{
       console.log('createMessage', message);
+      io.emit('newMessage', {
+        from: message.from,
+        text: message.text,
+        createdAt: new Date().getTime()
+      })
     });
 
     socket.on('disconnect', () =>{
