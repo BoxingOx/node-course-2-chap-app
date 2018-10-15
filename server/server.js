@@ -1,13 +1,26 @@
-const path = require('path');
-const express = require('express');
+  const path = require('path');
+  const express = require('express');
+  const http = require('http');
+  const socketIO = require('socket.io');
 
-const publicPath = path.join(__dirname, '../public');
-console.log(publicPath);
-const port = process.env.PORT || 3000;
-var app = express();
+  const publicPath = path.join(__dirname, '../public');
+  const port = process.env.PORT || 3000;
+  var app = express();
+  var server = http.createServer(app);
+  var io = socketIO(server);
 
-app.use(express.static(publicPath));
 
-app.listen(port, () =>{
-  console.log(`Server is up on ${port}`)
-});
+  app.use(express.static(publicPath));
+
+  io.on('connection', (socket) =>{ // indiv socket as opposed to all of the users server notices that a client has connected. Perspective of server
+    console.log('New user connected');
+
+    socket.on('disconnect', () =>{
+      console.log('User was disconnected');
+    });
+
+  });
+
+  server.listen(port, () =>{
+    console.log(`Server is up on ${port}`)
+  });
