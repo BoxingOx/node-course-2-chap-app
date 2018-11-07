@@ -15,7 +15,6 @@ it('should generate correct message object', () =>{
 
 
 describe('generateLocationMessage', () =>{
-
  it('should generate correct location object', () =>{
    var from = 'Randy';
    var latitude = 15
@@ -24,5 +23,5 @@ describe('generateLocationMessage', () =>{
    var message = generateLocationMessage(from, latitude, longitude);
    expect(message.createdAt).toBeA('number');
    expect(message).toInclude({from,url});
- }); // end describe 2 it 1
+  }); // end describe 2 it 1
 });// end describe 2
