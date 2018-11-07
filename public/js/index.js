@@ -9,16 +9,17 @@ var socket = io(); //client method from perspective of client
   });// end disconnect listener
 
   socket.on('newMessage', function (message) {
-    console.log('newMessage', message);
+    var formattedTime = moment(message.createdAt).format('h:mm a');
     var li = jQuery('<li></li>');
-    li.text(`${message.from}: ${message.text}`);  // safer to inject li as a var as opposed to appending template String directly
+    li.text(`${message.from} ${formattedTime}: ${message.text}`);  // safer to inject li as a var as opposed to appending template String directly
     jQuery('#messages').append(li);// append to existing list i think
   });// end newMessage Listener
 
   socket.on('newLocationMessage', function(message){
+    var formattedTime = moment(message.createdAt).format('h:mm a');
     var li = jQuery('<li></li>');
     var a = jQuery('<a target="_blank">My current location</a>');
-    li.text(`${message.from}: `);
+    li.text(`${message.from} ${formattedTime}: `);
     a.attr('href', message.url);
     li.append(a); // append the link
     jQuery('#messages').append(li);
