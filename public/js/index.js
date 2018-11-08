@@ -1,5 +1,20 @@
 var socket = io(); //client method from perspective of client
 
+function scrollToBottom() {
+  var messages =jQuery('#messages');
+  var newMessage = messages.children('li:last-child'); // message added just before call to scrollToBottom
+
+  var clientHeight = messages.prop('clientHeight'); //just after new value entered. We wanna move it down to new bottom
+  var scrollTop = messages.prop('scrollTop');  // we also want to change this value
+  var scrollHeight = messages.prop('scrollHeight'); // new height. clientheight not 100% at bottom now.
+  var newMessageHeight =newMessage.innerHeight(); // height of the new message
+  var lastMessageHeight = newMessage.prev().innerHeight(); // looks at the penultimate element
+
+  if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight)
+  messages.scrollTop(scrollHeight); // chained method to scroll down to bottom
+}// end fxn scrollToBottom
+
+
   socket.on('connect', function () {
     console.log('Connected to server');
   });// end connect listener
@@ -18,7 +33,7 @@ var socket = io(); //client method from perspective of client
       }); // actually renders the stuff inside of the template variable. It could be many things
 
     jQuery('#messages').append(html);
-
+      scrollToBottom();
     // var li = jQuery('<li></li>');
     // li.text(`${message.from} ${formattedTime}: ${message.text}`);  // safer to inject li as a var as opposed to appending template String directly
     // jQuery('#messages').append(li);// append to existing list i think
@@ -33,6 +48,7 @@ var socket = io(); //client method from perspective of client
       createdAt: formattedTime
       }); // end Mustache.render
     jQuery('#messages').append(html);
+    scrollToBottom();
     // var li = jQuery('<li></li>');
     // var a = jQuery('<a target="_blank">My current location</a>');
     // li.text(`${message.from} ${formattedTime}: `);
