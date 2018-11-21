@@ -16,12 +16,28 @@ function scrollToBottom() {
 
 
   socket.on('connect', function () {
-    console.log('Connected to server');
+    var params = jQuery.deparam(window.location.search);  // grabs stuff from chat.html in global search bar Once it is filled by user, I think
+
+    socket.emit('join', params, function(err){  // this executes once params has its parameters I think
+      if (err){
+        alert(err);
+        window.location.href = '/';
+      }else{
+        console.log('No error');
+      }
+    })
   });// end connect listener
 
   socket.on('disconnect', function () {
     console.log('Disconnected from server');
   });// end disconnect listener
+  socket.on('updateUserList', function (users){
+    var ol = jQuery('<ol></ol>');
+    users.forEach(function (user){
+      ol.append(jQuery('<li></li>').text(user)); // append stuff to list you want to show. now lets connect this list to the DOM...
+    });// end forEach
+      jQuery('#users').html(ol); // we dont use append, as we want to completely replace the list with the new version. Its just easier
+  });// end updateUserListListener
 
   socket.on('newMessage', function (message) {
       var formattedTime = moment(message.createdAt).format('h:mm a');
